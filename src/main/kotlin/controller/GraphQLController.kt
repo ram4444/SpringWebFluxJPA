@@ -88,6 +88,8 @@ class GraphQLController() {
     @RequestMapping("/")
     fun pingcheck():String {
         println("ping")
+        logger.info {"Info logger is on"}
+        logger.debug {"Debug logger is on"}
         return "success"
     }
 

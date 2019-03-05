@@ -2,6 +2,7 @@ package main.kotlin.controller
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.core.FuelManager
 import com.github.kittinunf.fuel.httpGet
 import com.github.kittinunf.fuel.httpPost
@@ -136,7 +137,10 @@ class FuelController() {
             if (null != fuelcurlBody_map) {
                 val fuelcurlBody_listpairstrany:List<Pair<String,Any?>>? = fuelcurlBody_map.toList()
 
-                val (request, response, result) = url.httpPost(fuelcurlBody_listpairstrany).header(fuelcurlHeader_map).responseString()
+                val (request, response, result) = Fuel.post(url)
+                        .header(fuelcurlHeader_map)
+                        .body(jacksonObjectMapper().writeValueAsString(fuelcurlBody_map))
+                        .responseString()
                 logger.info { "POST with Request Body" }
                 logger.debug { "request:" }; logger.debug { request }
                 logger.debug { "response:" }; logger.debug { response }
@@ -147,7 +151,9 @@ class FuelController() {
                         "result" to result.get()
                 )
             } else {
-                val (request, response, result) = url.httpPost().responseString()
+                val (request, response, result) = Fuel.post(url)
+                        .header(fuelcurlHeader_map)
+                        .responseString()
                 logger.info { "POST without Request Body" }
                 logger.debug { "request:" }; logger.debug { request }
                 logger.debug { "response:" }; logger.debug { response }
