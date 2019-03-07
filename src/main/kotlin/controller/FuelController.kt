@@ -109,7 +109,7 @@ class FuelController() {
             val fuelcurlHeader_map:Map<String,Any>? = bodymap.get("header")
 
             if (null != fuelcurlHeader_map) {
-                val (request, response, result) = url.httpGet().header(fuelcurlHeader_map).responseString()
+                val (request, response, result) = Fuel.get(url).header(fuelcurlHeader_map).responseString()
                 logger.info { "GET with Header" }
                 logger.debug { "request:" }; logger.debug { request }
                 logger.debug { "response:" }; logger.debug { response }
@@ -120,7 +120,7 @@ class FuelController() {
                 )
             } else {
                 // Header does not exist
-                val (request, response, result) = url.httpGet().responseString()
+                val (request, response, result) = Fuel.get(url).responseString()
                 logger.info { "GET without Header" }
                 logger.debug { "request:" }; logger.debug { request }
                 logger.debug { "response:" }; logger.debug { response }
@@ -131,7 +131,7 @@ class FuelController() {
         } else if (method.toLowerCase().equals("post")) {
             /* Post method*/
             // Get the header and body (to be sent) from the body
-            val fuelcurlHeader_map:Map<String,Any>? = bodymap.get("header")
+            val fuelcurlHeader_map:Map<String,Any> = bodymap.get("header").orEmpty()
             val fuelcurlBody_map:Map<String,Any>? = bodymap.get("body")
 
             if (null != fuelcurlBody_map) {
